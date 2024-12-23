@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
-    header("Location: capslogin.php"); // Redirect to login page if not logged in
+    header("Location: pages/capslogin.php"); // Redirect to login page if not logged in
     exit;
 }
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Include the database connection file
+include './api/db.php'; // Include the database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the user exists and if the password is correct
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['username'] = $username;
-        header("Location: dashboard.php"); // Redirect to the dashboard if login is successful
+        header("Location: pages/dashboard.php"); // Redirect to the dashboard if login is successful
         exit;
     } else {
         $error = "Invalid username or password"; // Display error message if login fails

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Include the database connection file
+include './api/db.php'; // Include the database connection file
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect to the login page after successful registration
             $_SESSION['username'] = $username;
-            header("Location: capslogin.php");
+            header("Location: pages/capslogin.php");
             exit;
         }
     }
