@@ -18,10 +18,10 @@ if ($conn->connect_error) {
 }
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: pages/capslogin.php"); // Redirect to login page if not logged in
-    exit;
-}
+// if (!isset($_SESSION['username'])) {
+//     header("Location: pages/capslogin.php"); // Redirect to login page if not logged in
+//     exit;
+// }
 
 // Handle the image upload and processing
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
@@ -256,10 +256,10 @@ $conn->close(); // Close the connection
     </style>
   <nav>
         <ul>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="configure-esp32.html">Configure ESP32 Cam</a></li>
-            <li><a href="plantdata.php">View Plant Data</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/configure-esp32">Configure ESP32 Cam</a></li>
+            <li><a href="/plantdata">View Plant Data</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
 

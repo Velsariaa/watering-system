@@ -2,10 +2,10 @@
 session_start();
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: pages/capslogin.php"); // Redirect to login page if not logged in
-    exit;
-}
+// if (!isset($_SESSION['username'])) {
+//     header("Location: /login"); 
+//     exit;
+// }
 ?>
 
 <!DOCTYPE html>
@@ -125,9 +125,9 @@ if (!isset($_SESSION['username'])) {
 
     <nav>
         <ul>
-            <li><a href="dashboard.php">HOME PAGE</a></li>
-            <li><a href="plantdata.php">PLANT IMAGE</a></li>
-            <li><a href="logout.php">LOG OUT</a></li>
+            <li><a href="dashboard">HOME PAGE</a></li>
+            <li><a href="plantdata">PLANT IMAGE</a></li>
+            <li><a href="logout">LOG OUT</a></li>
         </ul>
     </nav>
 
@@ -139,7 +139,7 @@ if (!isset($_SESSION['username'])) {
         <br>
         <p>
  
-    <img src="picss.jpg" alt="plant2" class="im">
+    <img src="/assets/picss.jpg" alt="plant2" class="im">
 <br>
 <p>
 <h1>Mission</h1><br>

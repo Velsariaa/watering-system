@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         /* Body Styling */
         body {
             font-family: Arial, sans-serif;
-            background-image: url(123.jpg);
+            background-image: url(/assets/123.jpg);
             margin: 0;
             display: flex;
             justify-content: center;
@@ -130,7 +130,7 @@ img{
 
     <div class="form-container">
         
-<center><img src="pics.jpg" alt="plant1" class="im1"></center>
+<center><img src="/assets/picss.jpg" alt="plant1" class="im1"></center>
 
         <h2 style="text-align: center;">LOG-IN HERE!</h2>
         <form method="POST" action="">
