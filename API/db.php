@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'user_database'; // Ensure you have this database created
+$dbname = 'new_user'; // Ensure you have this database created
 $username = 'root'; // Your MySQL username
 $password = ''; // Your MySQL password (leave blank if using the default)
 

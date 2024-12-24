@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// Check if the user is logged in
-// if (!isset($_SESSION['username'])) {
-//     header("Location: /login"); 
-//     exit;
-// }
+// Check if the user is logged in, if not then redirect to login page
+if (!isset($_SESSION['username'])) {
+    header("Location: /login"); 
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -125,9 +125,9 @@ session_start();
 
     <nav>
         <ul>
-            <li><a href="dashboard">HOME PAGE</a></li>
-            <li><a href="plantdata">PLANT IMAGE</a></li>
-            <li><a href="logout">LOG OUT</a></li>
+            <li><a href="/dashboard">HOME PAGE</a></li>
+            <li><a href="/plantdata">PLANT IMAGE</a></li>
+            <li><a href="./api/logout.php">LOG OUT</a></li>
         </ul>
     </nav>
 

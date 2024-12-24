@@ -11,7 +11,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 $createDatabase = "CREATE DATABASE IF NOT EXISTS $dbname";
 if (!$conn->query($createDatabase)) {
     die("Error creating database: " . $conn->error);
@@ -40,6 +39,16 @@ $createPlantWateredLogsTable = "CREATE TABLE IF NOT EXISTS plant_watered_logs (
 
 if (!$conn->query($createPlantWateredLogsTable)) {
     die("Error creating plant_watered_logs table: " . $conn->error);
+}
+
+$createUsersTable = "CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+)";
+
+if (!$conn->query($createUsersTable)) {
+    die("Error creating users table: " . $conn->error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'plant_images') {

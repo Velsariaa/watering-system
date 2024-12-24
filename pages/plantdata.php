@@ -138,10 +138,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 }
 
 // Fetch existing plant data from the database
-$sql = "SELECT * FROM plant_data";
+$sql = "SELECT * FROM plant_images";
 $result = $conn->query($sql);
 
-$conn->close(); // Close the connection
+$conn->close(); 
 ?>
 
 <!-- HTML content -->
@@ -259,7 +259,7 @@ $conn->close(); // Close the connection
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/configure-esp32">Configure ESP32 Cam</a></li>
             <li><a href="/plantdata">View Plant Data</a></li>
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="./api/logout">Logout</a></li>
         </ul>
     </nav>
 

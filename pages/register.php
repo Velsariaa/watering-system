@@ -1,6 +1,12 @@
 <?php
+
 session_start();
-include '/api/db.php'; // Include the database connection file
+include './api/db.php'; // Correct the path to the database connection file
+
+// Ensure $pdo is defined
+if (!isset($pdo)) {
+    die("Database connection failed.");
+}
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -34,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect to the login page after successful registration
             $_SESSION['username'] = $username;
-            header("Location: pages/capslogin.php");
+            header("Location: /login");
             exit;
         }
     }
@@ -46,8 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-</head>
-<body>
     <style>
         body {
     font-family: 'Arial', sans-serif;
@@ -134,6 +138,8 @@ p a:hover {
 }
 
     </style>
+</head>
+<body>
     <h2>Create an Account</h2>
     <form method="POST" action="">
         <label for="username">Username:</label>

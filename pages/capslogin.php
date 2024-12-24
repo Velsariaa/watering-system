@@ -1,6 +1,7 @@
 <?php
+
 session_start();
-include '/api/db.php'; // Include the database connection file
+include './api/db.php'; // Include the database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -148,7 +149,7 @@ img{
         <!-- Display error if exists -->
         <?php if (isset($error)) { echo "<p class='error-message'>$error</p>"; } ?>
 <br>
-        <p style="text-align: center;">Don't have an account? <br><a href="register.php" >Register HERE</a></p>
+        <p style="text-align: center;">Don't have an account? <br><a href="/register" >Register HERE</a></p>
     </div>
 
 </body>

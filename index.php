@@ -1,7 +1,7 @@
 <?php
 $uri = '/' . ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
-// Routing
+
 switch ($uri) {
     case '/':
         header("Location: pages/capslogin.php");
