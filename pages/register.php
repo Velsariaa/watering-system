@@ -1,6 +1,6 @@
 <?php
 session_start();
-include './api/db.php'; // Include the database connection file
+include '/api/db.php'; // Include the database connection file
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

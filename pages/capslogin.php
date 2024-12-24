@@ -1,6 +1,6 @@
 <?php
 session_start();
-include './api/db.php'; // Include the database connection file
+include '/api/db.php'; // Include the database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
