@@ -141,6 +141,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 $sql = "SELECT * FROM plant_images";
 $result = $conn->query($sql);
 
+// Fetch plant watered logs from the database
+$sql_logs = "SELECT plant_name, datetime_watered FROM plant_watered_logs ORDER BY datetime_watered DESC";
+$result_logs = $conn->query($sql_logs);
+
 $conn->close(); 
 ?>
 
@@ -299,6 +303,30 @@ $conn->close();
                 <?php else: ?>
                     <tr>
                         <td colspan="4">No plant data found.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+        <h3>Plant Watered Logs:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Plant Name</th>
+                    <th>Date and Time Watered</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result_logs->num_rows > 0): ?>
+                    <?php while ($row = $result_logs->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['plant_name']); ?></td>
+                            <td><?php echo $row['datetime_watered']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="2">No watering logs found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

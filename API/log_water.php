@@ -13,11 +13,10 @@ if ($conn->connect_error) {
 }
 
 // Get data from ESP8266
-$name = $_POST['name'];
 $datetime_watered = date('Y-m-d H:i:s'); // Get the current timestamp
 
 // Insert data into the table
-$sql = "INSERT INTO plant_watered_logs (name, datetime_watered) VALUES ('$name', '$datetime_watered')";
+$sql = "INSERT INTO plant_watered_logs (datetime_watered) VALUES ('$datetime_watered')";
 
 if ($conn->query($sql) === TRUE) {
     echo "Log inserted successfully";
