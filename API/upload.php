@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents($tempImagePath, $image);
 
         // Execute Python script
-        $pythonScriptPath = "../scripts/process_image.py"; // Adjust to your Python script's location
+        $pythonScriptPath = "C:/Users/Zyd/Desktop/watering-system/scripts/process_image.py"; // Adjust to your Python script's location
         $command = escapeshellcmd("python3 $pythonScriptPath $tempImagePath");
         $output = shell_exec($command);
 
