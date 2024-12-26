@@ -303,7 +303,7 @@ $conn->close();
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['plant_name']); ?></td>
-                            <td><img src="uploads/<?php echo htmlspecialchars($row['image_filename']); ?>" alt="Plant Image" style="max-width: 100px; height: auto;"></td>
+                            <td><img src="../API/display_image.php?id=<?php echo $row['id']; ?>" alt="Plant Image" style="max-width: 100px; height: auto;"></td>
                             <td><?php echo $row['width']; ?></td>
                             <td><?php echo $row['height']; ?></td>
                         </tr>
