@@ -10,11 +10,31 @@ const char* ssid = "enter-wifi-name-here"; // MODIFY
 const char* password = "enter-wifi-password-here"; // MODIFY
 const char* serverName = "http://enter-ip-address-of-backend-here/api/upload"; // MODIFY
 
-const char* ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = 28800;     // GMT+8 (Philippines timezone)
-const int daylightOffset_sec = 0;
+// LED Pins
+#define LED_BUILTIN 33  // Built-in white LED
+#define FLASH_LED 4     // Flash LED
+
+// NTP Settings
+#define UTC_OFFSET 8
 unsigned long lastCaptureTime = 0;
 bool hasRunToday = false;
+
+void setupLEDs() {
+    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(FLASH_LED, OUTPUT);
+    // Initially turn off both LEDs
+    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(FLASH_LED, LOW);
+}
+
+void blinkLED(int pin, int times, int delayMs) {
+    for(int i = 0; i < times; i++) {
+        digitalWrite(pin, HIGH);
+        delay(delayMs);
+        digitalWrite(pin, LOW);
+        delay(delayMs);
+    }
+}
 
 void initWiFi() {
   WiFi.begin(ssid, password);
@@ -176,80 +196,103 @@ bool sendImageToServer(String jsonData) {
 }
 
 void initTime() {
-  // Wait for WiFi connection first
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi not connected. Attempting to reconnect...");
-    if (!reconnectWiFi()) {
-      Serial.println("Failed to connect to WiFi. Cannot sync time.");
-      return;
+    // Set up time sync with NTP server
+    configTime(UTC_OFFSET * 3600, 0, "pool.ntp.org", "time.nist.gov");
+
+    // Wait until time is synchronized
+    struct tm timeinfo;
+    int attempts = 0;
+    const int maxAttempts = 10;
+    
+    while (!getLocalTime(&timeinfo) && attempts < maxAttempts) {
+        Serial.println("Trying to get time...");
+        blinkLED(FLASH_LED, 1, 100);  // Quick flash while trying
+        delay(1000);
+        attempts++;
     }
-  }
 
-  Serial.println("Initializing NTP...");
-  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer, "time.nist.gov");
-  
-  // Wait for time to be set
-  int retry = 0;
-  const int maxRetries = 10;
-  struct tm timeinfo;
-  
-  while(!getLocalTime(&timeinfo) && retry < maxRetries) {
-    Serial.println("Waiting for time sync...");
-    delay(1000);
-    retry++;
-  }
+    if (attempts >= maxAttempts) {
+        Serial.println("Failed to sync time after maximum attempts");
+        // Error pattern: rapid blinks
+        blinkLED(FLASH_LED, 5, 200);
+        return;
+    }
 
-  if (retry >= maxRetries) {
-    Serial.println("Failed to obtain time after multiple attempts");
-    return;
-  }
+    Serial.println("Time synchronization complete!");
+    Serial.printf("Current time: %02d:%02d:%02d\n", 
+        timeinfo.tm_hour, 
+        timeinfo.tm_min, 
+        timeinfo.tm_sec
+    );
 
-  Serial.println("Time synchronized successfully");
-  Serial.printf("Current time: %02d:%02d:%02d\n", 
-    timeinfo.tm_hour, 
-    timeinfo.tm_min, 
-    timeinfo.tm_sec
-  );
+    // Success pattern: both LEDs blink together
+    for(int i = 0; i < 3; i++) {
+        digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(FLASH_LED, HIGH);
+        delay(5000);
+        digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(FLASH_LED, LOW);
+        delay(5000);
+    }
+
+    // Keep built-in LED on to indicate active time sync
+    digitalWrite(LED_BUILTIN, HIGH);
 }
 
 bool isTimeToCapture() {
-  struct tm timeinfo;
-  if(!getLocalTime(&timeinfo)){
-    Serial.println("Failed to obtain time");
+    struct tm timeinfo;
+    if (getLocalTime(&timeinfo)) {
+        Serial.printf("Current time: %02d:%02d:%02d\n", 
+            timeinfo.tm_hour, 
+            timeinfo.tm_min,
+            timeinfo.tm_sec
+        );
+        
+        if(timeinfo.tm_hour == 10 && timeinfo.tm_min >= 0 && timeinfo.tm_min < 2 && !hasRunToday) {
+            // Flash the LED when capturing
+            blinkLED(FLASH_LED, 2, 500);
+            hasRunToday = true;
+            return true;
+        }
+        
+        if(timeinfo.tm_hour != 10) {
+            hasRunToday = false;
+        }
+    } else {
+        Serial.println("Failed to get time");
+        // Error indication
+        blinkLED(FLASH_LED, 3, 200);
+        digitalWrite(LED_BUILTIN, LOW);  // Turn off status LED if time sync lost
+    }
+    
     return false;
-  }
-
-  Serial.printf("Current time: %02d:%02d\n", timeinfo.tm_hour, timeinfo.tm_min);
-  
-  if(timeinfo.tm_hour == 10 && timeinfo.tm_min >= 0 && timeinfo.tm_min < 2 && !hasRunToday) {
-    hasRunToday = true;
-    return true;
-  }
-  
-  if(timeinfo.tm_hour != 10) {
-    hasRunToday = false;
-  }
-  
-  return false;
 }
 
 void setup() {
-  Serial.begin(115200);
-  initWiFi();
-  startCamera();
-  initTime();
+    Serial.begin(115200);
+    setupLEDs();  // Initialize LED pins
+    
+    // Quick test of both LEDs
+    blinkLED(LED_BUILTIN, 1, 500);
+    blinkLED(FLASH_LED, 1, 500);
+    
+    initWiFi();
+    startCamera();
+    initTime();
 }
 
 void loop() {
-  if(isTimeToCapture()) {
-    Serial.println("It's time to capture! Taking picture...");
-    camera_fb_t* fb = captureImage();
-    if (fb) {
-      String jsonData = createJsonPayload(fb);
-      sendImageToServer(jsonData);
-      esp_camera_fb_return(fb);
+    if(isTimeToCapture()) {
+        Serial.println("It's time to capture! Taking picture...");
+        camera_fb_t* fb = captureImage();
+        if (fb) {
+            digitalWrite(FLASH_LED, HIGH);  // Turn on flash for photo
+            String jsonData = createJsonPayload(fb);
+            sendImageToServer(jsonData);
+            esp_camera_fb_return(fb);
+            digitalWrite(FLASH_LED, LOW);   // Turn off flash
+        }
     }
-  }
-  delay(15000); 
+    delay(15000);
 }
 
