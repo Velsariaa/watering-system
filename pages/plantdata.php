@@ -123,6 +123,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                     } else {
                         echo "Error: " . $sql . "<br>" . $conn->error;
                     }
+
+                    // Insert plant name into plant_watered_logs
+                    $sql_log = "UPDATE plant_watered_logs SET plant_name = '$plantName'";
+                    if ($conn->query($sql_log) !== TRUE) {
+                        echo "Error updating plant_watered_logs: " . $conn->error;
+                    }
                 } else {
                     echo "Sorry, there was an error uploading your file.";
                 }
@@ -219,7 +225,7 @@ $conn->close();
         color: white;
     }
     tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color:rgb(175, 175, 175);
     }
 
     /* Footer Styling */
@@ -272,9 +278,11 @@ $conn->close();
         <hr>
     <div class="content">
         <h2>Upload an Image to Measure Plant Dimensions</h2>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+        <form id="plantForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <label for="plant_name">Plant Name:</label>
-            <input type="text" name="plant_name" id="plant_name" placeholder="Enter plant name" required><br><br>
+            <input type="text" name="plant_name" id="plant_name" placeholder="Enter plant name" required readonly><br><br>
+            <button type="button" id="editButton" onclick="editPlantName()">Edit</button>
+            <button type="button" id="saveButton" onclick="savePlantName()" style="display:none;">Save Changes</button><br><br>
             <label for="image">Choose an image:</label>
             <input type="file" name="image" id="image" accept="image/*" required><br><br>
             <input type="submit" value="Upload Image">
@@ -332,5 +340,36 @@ $conn->close();
             </tbody>
         </table>
     </div>
+
+    <script>
+        function editPlantName() {
+            document.getElementById('plant_name').readOnly = false;
+            document.getElementById('editButton').style.display = 'none';
+            document.getElementById('saveButton').style.display = 'inline';
+        }
+
+        function savePlantName() {
+            document.getElementById('plant_name').readOnly = true;
+            document.getElementById('editButton').style.display = 'inline';
+            document.getElementById('saveButton').style.display = 'none';
+
+            // Trigger the update of plant_name in plant_watered_logs
+            var plantName = document.getElementById('plant_name').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "./api/update_plant_name.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        alert(xhr.responseText); // Show response message
+                        location.reload(); // Refresh the page
+                    } else {
+                        alert('Error: ' + xhr.status);
+                    }
+                }
+            };
+            xhr.send("plant_name=" + encodeURIComponent(plantName));
+        }
+    </script>
 </body>
 </html>
