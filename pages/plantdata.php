@@ -353,7 +353,7 @@ $conn->close();
             document.getElementById('editButton').style.display = 'inline';
             document.getElementById('saveButton').style.display = 'none';
 
-            // Trigger the update of plant_name in plant_watered_logs
+            // Trigger the update of plant_name in plant_watered_logs and plant_images
             var plantName = document.getElementById('plant_name').value;
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "./api/update_plant_name.php", true);
