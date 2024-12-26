@@ -18,9 +18,10 @@ if (!$conn->query($createDatabase)) {
 
 $conn->select_db($dbname);
 
+// Update the plant_images table structure to make plant_name nullable
 $createPlantImagesTable = "CREATE TABLE IF NOT EXISTS plant_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    plant_name VARCHAR(255) NOT NULL,
+    plant_name VARCHAR(255) DEFAULT NULL, -- Made nullable
     image LONGBLOB NOT NULL,
     height FLOAT DEFAULT NULL,
     width FLOAT DEFAULT NULL,
@@ -28,7 +29,7 @@ $createPlantImagesTable = "CREATE TABLE IF NOT EXISTS plant_images (
 )";
 
 if (!$conn->query($createPlantImagesTable)) {
-    die("Error creating plant_images table: " . $conn->error);
+    die("Error creating or updating plant_images table: " . $conn->error);
 }
 
 $createPlantWateredLogsTable = "CREATE TABLE IF NOT EXISTS plant_watered_logs (
@@ -51,11 +52,11 @@ if (!$conn->query($createUsersTable)) {
     die("Error creating users table: " . $conn->error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'plant_images') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputData = json_decode(file_get_contents('php://input'), true);
 
-    if (isset($inputData['plant_name'], $inputData['image'])) {
-        $plantName = $inputData['plant_name'];
+    if (isset($inputData['image'])) {
+        $plantName = $inputData['plant_name'] ?? null; // Optional plant_name
         $imageBase64 = $inputData['image']; // Expecting image as base64 string
         $image = base64_decode($imageBase64); // Decode base64 image
 
@@ -99,31 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
         $stmt->close();
         unlink($tempImagePath); // Clean up temporary file
     } else {
-        echo json_encode(["error" => "Invalid input. Required fields: plant_name, image."]);
+        echo json_encode(["error" => "Invalid input. Required field: image."]);
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'plant_watered_logs') {
-    $inputData = json_decode(file_get_contents('php://input'), true);
-
-    if (isset($inputData['plant_name'], $inputData['datetime_watered'])) {
-        $plantName = $inputData['plant_name'];
-        $datetimeWatered = $inputData['datetime_watered'];
-
-        // Insert into plant_watered_logs table
-        $stmt = $conn->prepare("INSERT INTO plant_watered_logs (plant_name, datetime_watered) VALUES (?, ?)");
-        $stmt->bind_param("ss", $plantName, $datetimeWatered);
-
-        if ($stmt->execute()) {
-            echo json_encode(["message" => "Data successfully uploaded to plant_watered_logs table."]);
-        } else {
-            echo json_encode(["error" => "Failed to insert into plant_watered_logs: " . $stmt->error]);
-        }
-
-        $stmt->close();
-    } else {
-        echo json_encode(["error" => "Invalid input. Required fields: plant_name, datetime_watered."]);
-    }
-} else {
-    echo json_encode(["error" => "Invalid request. Use 'action=plant_images' or 'action=plant_watered_logs' in the query string."]);
 }
 
 $conn->close();
