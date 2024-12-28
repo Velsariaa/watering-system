@@ -1,29 +1,29 @@
 <?php
 
 session_start();
-include './api/db.php'; // Correct the path to the database connection file
+include './api/db.php'; 
 
-// Ensure $pdo is defined
+
 if (!isset($pdo)) {
     die("Database connection failed.");
 }
 
-// Check if the form is submitted
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validate form inputs
+    
     if (empty($username) || empty($password) || empty($confirm_password)) {
         $error = "All fields are required!";
     } elseif ($password !== $confirm_password) {
         $error = "Passwords do not match!";
     } else {
-        // Hash the password before saving it to the database
+        
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Check if the username already exists in the database
+       
         $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->bindParam(':username', $username);
         $stmt->execute();
@@ -32,13 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user) {
             $error = "Username already taken!";
         } else {
-            // Insert the new user into the database
+           
             $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $hashed_password);
             $stmt->execute();
 
-            // Redirect to the login page after successful registration
+            
             $_SESSION['username'] = $username;
             header("Location: /login");
             exit;

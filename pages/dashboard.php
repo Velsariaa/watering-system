@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if the user is logged in, if not then redirect to login page
 if (!isset($_SESSION['username'])) {
     header("Location: /login"); 
     exit;
@@ -22,7 +21,6 @@ if (!isset($_SESSION['username'])) {
         box-sizing: border-box;
     }
 
-    /* Body Styling */
     body {
         font-family: Arial, sans-serif;
         background-image: linear-gradient(white,gray);
@@ -31,7 +29,6 @@ if (!isset($_SESSION['username'])) {
 
     }
 
-    /* Navigation Bar Styling */
     nav {
         width: 350px;
         background-color: #19461A;
@@ -65,18 +62,18 @@ if (!isset($_SESSION['username'])) {
         color: black;
     }
 
-    /* Main Content Styling */
+    
     .content {
-        margin-left: 220px; /* Adjust according to navbar width */
+        margin-left: 220px;
         padding: 40px;
-        text-align: center; /* Center the welcome message */
+        text-align: center; 
     }
 
     .content h1 {
         color: #333;
     }
 
-    /* Footer Styling */
+    
     footer {
         background-color: #333;
         color: white;
@@ -90,7 +87,7 @@ if (!isset($_SESSION['username'])) {
         margin-left: 180px;
     }
 
-    /* Responsive Design for Mobile */
+    
     @media screen and (max-width: 600px) {
         nav {
             width: 100%;
@@ -127,11 +124,11 @@ if (!isset($_SESSION['username'])) {
         <ul>
             <li><a href="/dashboard">HOME PAGE</a></li>
             <li><a href="/plantdata">PLANT IMAGE</a></li>
-            <li><a href="./api/logout.php">LOG OUT</a></li>
+            <li><a href="/login">LOG OUT</a></li>
         </ul>
     </nav>
 
-    <!-- Main Content -->
+    
     <div class="content">
         <h1>WELCOME,<br> to BSIT 4A Plantito's and Plantita's <br><?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
         <hr>
@@ -157,7 +154,7 @@ and care for plants.
 
     </div>
    
-    <!-- Footer -->
+    
     <footer>
         <pre>&copy; 2024 Plant Monitoring System. All Rights Reserved.</pre>
     </footer>

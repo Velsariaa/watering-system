@@ -1,20 +1,20 @@
 <?php
-// Database connection
-$servername = "localhost"; // Your database server
-$username = "root";        // Your database username
-$password = "";            // Your database password
-$dbname = "new_user";  // Your database name
+
+$servername = "localhost";
+$username = "root";       
+$password = "";            
+$dbname = "new_user"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get data from ESP8266
-$plantName = $_POST['name']; // Get the plant name from the POST request
-$datetime_watered = date('Y-m-d H:i:s'); // Get the current timestamp
+
+$plantName = $_POST['name']; 
+$datetime_watered = date('Y-m-d H:i:s');
 
 // Insert data into the table
 $sql = "INSERT INTO plant_watered_logs (plant_name, datetime_watered) VALUES ('$plantName', '$datetime_watered')";

@@ -1,25 +1,25 @@
 <?php
 
 session_start();
-include './api/db.php'; // Include the database connection file
+include './api/db.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Query to find the user
+    
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $user = $stmt->fetch();
 
-    // Check if the user exists and if the password is correct
+    
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['username'] = $username;
-        header("Location: pages/dashboard.php"); // Redirect to the dashboard if login is successful
+        header("Location: pages/dashboard.php");
         exit;
     } else {
-        $error = "Invalid username or password"; // Display error message if login fails
+        $error = "Invalid username or password"; 
     }
 }
 ?>
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-sizing: border-box;
         }
 
-        /* Body Styling */
+     
         body {
             font-family: Arial, sans-serif;
             background-image: url(/assets/123.jpg);
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         background-size: 100% 100%;
         }
 
-        /* Form Container */
+        
         .form-container {
             background-image: linear-gradient(#3AA346,#3AA346);
             padding: 20px;
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             width: 300px;
         }
 
-        /* Form Elements */
+        
         label {
             display: block;
             margin-bottom: 5px;
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 12px;
             margin-bottom: 15px;
             font-size: 16px;
-            border-radius: 25px; /* Makes the input oval */
+            border-radius: 25px; 
             border: 1px solid #ccc;
             outline: none;
             box-sizing: border-box;
@@ -97,14 +97,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #45a049;
         }
 
-        /* Optional - style for the error message */
+       
         .error-message {
             color: red;
             margin-bottom: 15px;
             text-align: center;
         }
 
-        /* Register link */
+        
         a {
             text-decoration: none;
             color:yellow;
@@ -119,8 +119,8 @@ img{
     border-radius: 50%;
     box-sizing: border-box;
             background-color: #f9f9f9;
-            border: 4px solid transparent; /* Transparent border for gradient effect */
-            background-image: linear-gradient(to right, green, blue), linear-gradient(to right, yellow, red); /* Dual color gradient */
+            border: 4px solid transparent; 
+            background-image: linear-gradient(to right, green, blue), linear-gradient(to right, yellow, red); 
             background-origin: border-box;
             background-clip: content-box, border-box
 }
@@ -146,7 +146,7 @@ img{
         </form>
         <br>
 
-        <!-- Display error if exists -->
+       
         <?php if (isset($error)) { echo "<p class='error-message'>$error</p>"; } ?>
 <br>
         <p style="text-align: center;">Don't have an account? <br><a href="/register" >Register HERE</a></p>
