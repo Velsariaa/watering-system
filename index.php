@@ -58,7 +58,7 @@ $conn->close();
 
 switch ($uri) {
     case '/':
-        header("Location: pages/capslogin.php");
+        header("Location: /login");
         exit;
     case '/login':
         include 'pages/capslogin.php';
