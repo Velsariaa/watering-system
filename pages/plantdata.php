@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     }
 }
 
-$sql = "SELECT * FROM plant_images";
+$sql = "SELECT * FROM plant_images ORDER BY datetime_captured DESC";
 $result = $conn->query($sql);
 
 $sql_logs = "SELECT plant_name, datetime_watered FROM plant_watered_logs ORDER BY datetime_watered DESC";
@@ -245,7 +245,6 @@ $conn->close();
     <nav>
         <ul>
             <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/configure-esp32">Configure ESP32 Cam</a></li>
             <li><a href="/plantdata">View Plant Data</a></li>
             <li><a href="/logout">Logout</a></li>
         </ul>
