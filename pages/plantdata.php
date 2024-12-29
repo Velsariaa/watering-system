@@ -269,7 +269,7 @@ $conn->close();
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/configure-esp32">Configure ESP32 Cam</a></li>
             <li><a href="/plantdata">View Plant Data</a></li>
-            <li><a href="./api/logout">Logout</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
 
@@ -342,6 +342,14 @@ $conn->close();
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // local storage retrieve
+            var savedPlantName = localStorage.getItem("plant_name");
+            if (savedPlantName) {
+                document.getElementById('plant_name').value = savedPlantName;
+            }
+        });
+
         function editPlantName() {
             document.getElementById('plant_name').readOnly = false;
             document.getElementById('editButton').style.display = 'none';
@@ -353,8 +361,11 @@ $conn->close();
             document.getElementById('editButton').style.display = 'inline';
             document.getElementById('saveButton').style.display = 'none';
 
-        
+            // local storage
             var plantName = document.getElementById('plant_name').value;
+            localStorage.setItem("plant_name", plantName);
+
+            
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "./api/update_plant_name.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

@@ -84,6 +84,9 @@ switch ($uri) {
     case '/api/update_plant_name':
         include 'API/update_plant_name.php';
         break;
+    case '/logout':
+        include 'API/logout.php';
+        break;
     default:
         http_response_code(404);
         echo "404 Not Found";

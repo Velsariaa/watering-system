@@ -124,7 +124,7 @@ if (!isset($_SESSION['username'])) {
         <ul>
             <li><a href="/dashboard">HOME PAGE</a></li>
             <li><a href="/plantdata">PLANT IMAGE</a></li>
-            <li><a href="/login">LOG OUT</a></li>
+            <li><a href="/logout">LOG OUT</a></li>
         </ul>
     </nav>
 

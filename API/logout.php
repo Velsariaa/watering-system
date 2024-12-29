@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy(); 
-header("Location: ./pages/capslogin.php");
+header("Location: /login");
 exit;
 ?>

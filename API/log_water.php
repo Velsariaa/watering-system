@@ -16,7 +16,6 @@ if ($conn->connect_error) {
 $plantName = $_POST['name']; 
 $datetime_watered = date('Y-m-d H:i:s');
 
-// Insert data into the table
 $sql = "INSERT INTO plant_watered_logs (plant_name, datetime_watered) VALUES ('$plantName', '$datetime_watered')";
 
 if ($conn->query($sql) === TRUE) {
