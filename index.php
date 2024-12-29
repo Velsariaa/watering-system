@@ -84,6 +84,12 @@ switch ($uri) {
     case '/api/update_plant_name':
         include 'API/update_plant_name.php';
         break;
+    case '/delete_log': 
+        include 'pages/delete_log.php';
+        break;
+    case '/delete_plant': // Added routing for delete_plant.php
+        include 'pages/delete_plant.php';
+        break;
     case '/logout':
         include 'API/logout.php';
         break;

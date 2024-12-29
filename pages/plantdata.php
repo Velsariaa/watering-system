@@ -274,6 +274,7 @@ $conn->close();
                         <th>Width (px)</th>
                         <th>Height (px)</th>
                         <th>Date and Time Captured</th>
+                        <th>Action</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -285,11 +286,12 @@ $conn->close();
                                 <td><?php echo $row['width']; ?></td>
                                 <td><?php echo $row['height']; ?></td>
                                 <td><?php echo $row['datetime_captured']; ?></td>
+                                <td><a href="delete_plant?id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this plant?');">Delete</a></td> <!-- Removed Edit action and added confirmation for Delete -->
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="5">No plant data found.</td>
+                            <td colspan="6">No plant data found.</td> 
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -301,6 +303,7 @@ $conn->close();
                     <tr>
                         <th>Plant Name</th>
                         <th>Date and Time Watered</th>
+                        <th>Action</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -309,11 +312,12 @@ $conn->close();
                             <tr>
                                 <td><?php echo htmlspecialchars($row['plant_name']); ?></td>
                                 <td><?php echo $row['datetime_watered']; ?></td>
+                                <td><a href="delete_log?plant_name=<?php echo urlencode($row['plant_name']); ?>&datetime_watered=<?php echo urlencode($row['datetime_watered']); ?>" onclick="return confirm('Are you sure you want to delete this log?');">Delete</a></td> <!-- Updated delete link -->
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="2">No watering logs found.</td>
+                            <td colspan="3">No watering logs found.</td> 
                         </tr>
                     <?php endif; ?>
                 </tbody>
